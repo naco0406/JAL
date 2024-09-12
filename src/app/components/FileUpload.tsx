@@ -1,6 +1,7 @@
 import { InboxOutlined } from '@ant-design/icons';
 import { Progress, Upload, message } from 'antd';
 import React, { useState } from 'react';
+import { UploadFile, UploadChangeParam } from 'antd/es/upload/interface'; // Import Ant Design types
 
 const { Dragger } = Upload;
 
@@ -9,24 +10,23 @@ interface FileUploadProps {
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFileUploaded }) => {
-    // @typescript-eslint/no-explicit-any
-    const [fileList, setFileList] = useState<any[]>([]);
-    const [uploadProgress, setUploadProgress] = useState(0);
+    const [fileList, setFileList] = useState<UploadFile[]>([]); // Specify UploadFile[] type
+    const [uploadProgress, setUploadProgress] = useState<number>(0); // Specify number type
 
     const props = {
         name: 'file',
         multiple: false,
         fileList,
         beforeUpload: (file: File) => {
-            const isSupportedType = file.type === 'application/pdf' ||
+            const isSupportedType =
+                file.type === 'application/pdf' ||
                 file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
             if (!isSupportedType) {
                 message.error(`${file.name}은 지원되지 않는 파일 형식입니다.`);
             }
             return isSupportedType || Upload.LIST_IGNORE;
         },
-        // @typescript-eslint/no-explicit-any
-        onChange(info: any) {
+        onChange(info: UploadChangeParam<UploadFile<any>>) { // Specify UploadChangeParam type
             const { status } = info.file;
             if (status !== 'uploading') {
                 console.log(info.file, info.fileList);
@@ -44,7 +44,9 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUploaded }) => {
                         setUploadProgress(percentLoaded);
                     }
                 };
-                reader.readAsText(info.file.originFileObj);
+                if (info.file.originFileObj) {
+                    reader.readAsText(info.file.originFileObj);
+                }
             } else if (status === 'error') {
                 message.error(`${info.file.name} 파일 업로드에 실패했습니다.`);
             }
