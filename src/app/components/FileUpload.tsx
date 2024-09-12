@@ -1,7 +1,7 @@
-import { InboxOutlined } from '@ant-design/icons';
 import { Progress, Upload, message } from 'antd';
-import React, { useState } from 'react';
-import { UploadFile, UploadChangeParam } from 'antd/es/upload/interface'; // Import Ant Design types
+import { InboxOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import { UploadFile, UploadChangeParam } from 'antd/es/upload/interface'; // Correct imports
 
 const { Dragger } = Upload;
 
@@ -10,8 +10,8 @@ interface FileUploadProps {
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFileUploaded }) => {
-    const [fileList, setFileList] = useState<UploadFile[]>([]); // Specify UploadFile[] type
-    const [uploadProgress, setUploadProgress] = useState<number>(0); // Specify number type
+    const [fileList, setFileList] = useState<UploadFile<File>[]>([]); // Correct type for fileList
+    const [uploadProgress, setUploadProgress] = useState<number>(0);
 
     const props = {
         name: 'file',
@@ -26,7 +26,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUploaded }) => {
             }
             return isSupportedType || Upload.LIST_IGNORE;
         },
-        onChange(info: UploadChangeParam<UploadFile<any>>) { // Specify UploadChangeParam type
+        onChange(info: UploadChangeParam<UploadFile<File>>) { // Correct type for onChange parameter
             const { status } = info.file;
             if (status !== 'uploading') {
                 console.log(info.file, info.fileList);
@@ -44,13 +44,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUploaded }) => {
                         setUploadProgress(percentLoaded);
                     }
                 };
-                if (info.file.originFileObj) {
-                    reader.readAsText(info.file.originFileObj);
-                }
+                reader.readAsText(info.file.originFileObj as File);
             } else if (status === 'error') {
                 message.error(`${info.file.name} 파일 업로드에 실패했습니다.`);
             }
-            setFileList(info.fileList);
+            setFileList(info.fileList as UploadFile<File>[]); // Ensure correct type here
         },
     };
 
