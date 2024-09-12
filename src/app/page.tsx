@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Typography, message, Spin } from 'antd';
+import { Spin, Typography, message } from 'antd';
+import { useState } from 'react';
 import FileUpload from './components/FileUpload';
 import SyllabusDisplay from './components/SyllabusDisplay';
 import { SyllabusInfo } from './types';
