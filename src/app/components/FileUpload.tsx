@@ -9,7 +9,7 @@ interface FileUploadProps {
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFileUploaded }) => {
-    // @ts-ignore
+    // @ts-expect-error
     const [fileList, setFileList] = useState<any[]>([]);
     const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -25,7 +25,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUploaded }) => {
             }
             return isSupportedType || Upload.LIST_IGNORE;
         },
-        // @ts-ignore
+        // @ts-expect-error
         onChange(info: any) {
             const { status } = info.file;
             if (status !== 'uploading') {
