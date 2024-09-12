@@ -14,6 +14,7 @@ export class OpenAIService {
 
     async analyzeSyllabus(content: string): Promise<SyllabusInfo> {
         try {
+            console.log("OpenAI API 요청:", content);
             const completion = await this.openai.chat.completions.create({
                 model: "gpt-4o-mini",
                 messages: [
@@ -30,6 +31,7 @@ export class OpenAIService {
             });
 
             const result = completion.choices[0].message.content?.trim();
+            console.log("OpenAI API response:", result);
 
             if (!result) {
                 throw new Error("분석 결과가 없습니다.");

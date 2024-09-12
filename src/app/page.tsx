@@ -5,6 +5,7 @@ import { useState } from 'react';
 import FileUpload from './components/FileUpload';
 import SyllabusDisplay from './components/SyllabusDisplay';
 import { SyllabusInfo } from './types';
+import { OpenAIService } from './utils/openai'; // Import OpenAIService
 
 const { Title } = Typography;
 
@@ -12,23 +13,13 @@ export default function Home() {
   const [syllabusInfo, setSyllabusInfo] = useState<SyllabusInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const openAIService = new OpenAIService(); // Instantiate OpenAIService
+
   const handleFileUploaded = async (content: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ content }),
-      });
-
-      if (!response.ok) {
-        throw new Error('분석에 실패했습니다');
-      }
-
-      const data = await response.json();
-      setSyllabusInfo(data.analysis);
+      const analysis = await openAIService.analyzeSyllabus(content);
+      setSyllabusInfo(analysis);
     } catch (error) {
       console.error('오류:', error);
       message.error('강의 계획서 분석에 실패했습니다');

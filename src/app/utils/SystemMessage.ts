@@ -63,6 +63,7 @@ Output only a JSON object with the specified structure. It should be pure JSON w
 
 ### Critical Points:
 - Return only the JSON object. Do not include any other text, explanations, or comments in your response.
+- Please provide the analysis result as a pure JSON object without any markdown delimiters or additional text.
 - Include all required fields. Use empty strings or empty arrays for missing information.
 - Maintain the original language of the text (English or Korean).
 - Focus on accurate information extraction. Do not make assumptions.
